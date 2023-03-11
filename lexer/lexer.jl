@@ -12,18 +12,21 @@ end
 pos = 1
 
 function tokenizer(chars::String)::Token
-    c::Char = 'a'
-    #pos = 0
+    #c::Char = 'a'
+    #pos = 1
     tkn_start = pos
     println(pos)
 
-    while !(c |> isspace) && pos < length(chars)
-        c = chars[pos]
+    while !(chars[pos] |> isspace) && pos < length(chars)
+        #c = chars[pos]
         global pos += 1
     end
 
     println(pos)
-    tkn_end = if pos == length(chars); pos else pos - 2 end
+    #tkn_end = if pos == length(chars); pos else pos - 2 end
+    tkn_end = if pos == length(chars); pos else pos - 1 end
+
+    global pos += 1
 
     if isa(tryparse(Float64, chars[tkn_start:tkn_end]), Number)
         return Token(LiteralInt, tkn_start, tkn_end)
