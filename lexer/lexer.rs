@@ -8,9 +8,9 @@ pub enum TokenKind {
 }
 
 pub fn slice_to_tokenkind(slice: &str) -> TokenKind {
-    if let Ok(_) = slice.parse::<i32>() {
+    if slice.parse::<i32>().is_ok() {
         return TokenKind::LiteralInt;
-    } else if let Ok(_) = slice.parse::<f32>() {
+    } else if slice.parse::<f32>().is_ok() {
         return TokenKind::LiteralFloat;
     } else {
         return TokenKind::Word;
@@ -37,7 +37,7 @@ impl<'a> Lexer<'a> {
 
 impl Iterator for Lexer<'_> {
     type Item = Lexem;
-    
+
     fn next(&mut self) -> Option<Self::Item> {
         if self.index >= self.input.len() { return None }
 
@@ -48,10 +48,10 @@ impl Iterator for Lexer<'_> {
         }
         let end = self.index - 1;
         self.index += 1;
-        
+
         return Some(
             Lexem(
-                slice_to_tokenkind(&self.input[start..end]),
+                slice_to_tokenkind(&self.input[start..=end]),
                 start,
                 end
             )
@@ -71,6 +71,6 @@ fn main() {
     let x = Lexer::new(string1);
     for i in x {
         println!("{:?}", i);
-        println!("{:?}", &string1[i.1..i.2]);
+        println!("{:?}", &string1[i.1..=i.2]);
     }
 }
